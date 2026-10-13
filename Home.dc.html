@@ -32,7 +32,7 @@
     <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></symbol>
     <symbol id="ic-pool" viewBox="0 0 24 24"><path d="M8 14V5.5a2 2 0 0 1 4 0M16 14V5.5a2 2 0 0 0-2-2M8 8h8M8 11h8"></path><path d="M3 17.5c1.8 0 1.8-1.2 3.6-1.2s1.8 1.2 3.6 1.2 1.8-1.2 3.6-1.2 1.8 1.2 3.6 1.2 1.8-1.2 3.6-1.2"></path></symbol>
     <symbol id="ic-news" viewBox="0 0 24 24"><rect x="3" y="4.5" width="14" height="15.5" rx="1.5"></rect><path d="M17 8.5h3.2V18a2 2 0 0 1-2 2H17M6.5 8.5h7M6.5 12h7M6.5 15.5h4.5"></path></symbol>
-    <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 21 21"></path></symbol>
+    <symbol id="ic-app" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"></rect><path d="M10.5 18.5h3"></path></symbol><symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"></path><circle cx="9" cy="10.5" r=".6"></circle><circle cx="12" cy="10.5" r=".6"></circle><circle cx="15" cy="10.5" r=".6"></circle></symbol><symbol id="ic-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 21 21"></path></symbol>
     <symbol id="ic-a11y" viewBox="0 0 24 24"><circle cx="12" cy="4.2" r="1.8"></circle><path d="M5 8.2l7 1.3 7-1.3M12 9.5v5M12 14.5l-3.2 6.3M12 14.5l3.2 6.3"></path></symbol>
     <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
     <symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></symbol>
@@ -93,7 +93,7 @@
 
           <div style="position:absolute;top:40px;left:40px;display:flex;justify-content:flex-start;gap:10px;pointer-events:none;transform:scale(0.8);transform-origin:top left">
             <sc-for list="{{ quick }}" as="q" hint-placeholder-count="7">
-              <div style="{{ q.itemStyle }}" style-hover="--hs:1.08;--hr:60deg;--hbg:var(--hc);--hic:#fff;--lw:800">
+              <div onClick="{{ q.open }}" style="{{ q.itemStyle }}" style-hover="--hs:1.08;--hr:60deg;--hbg:var(--hc);--hic:#fff;--lw:800">
                 <div style="{{ q.hexStyle }}">
                   <svg width="26" height="26" fill="none" stroke="var(--hic,#117975)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="transition:stroke .2s,transform .5s cubic-bezier(.2,.8,.2,1);transform:rotate(calc(-1 * var(--hr,0deg)))"><use href="#{{ q.icon }}"></use></svg>
                 </div>
@@ -193,7 +193,7 @@
           <div style="position:absolute;inset:auto 0 0 0;height:200px;background:linear-gradient(0deg,rgba(0,40,38,.45),rgba(0,40,38,0));pointer-events:none"></div>
           <img src="assets/hero-overlay-mobile.png" alt="" style="position:absolute;right:0;bottom:-40px;width:80%;height:auto;opacity:0.5;pointer-events:none">
 
-          <div style="position:absolute;top:33px;left:0;right:0;display:flex;justify-content:center;padding:6px 10px 4px;box-sizing:border-box">
+          <div ref="{{ mqRef }}" onPointerDown="{{ mqDown }}" onPointerMove="{{ mqMove }}" onPointerUp="{{ mqUp }}" onPointerLeave="{{ mqUp }}" style="position:absolute;top:33px;left:0;right:0;display:flex;justify-content:flex-start;padding:6px 18px 30px;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;cursor:grab">
             <sc-for list="{{ mQuick }}" as="q" hint-placeholder-count="7">
               <div onClick="{{ q.onClick }}" style="{{ q.wrapStyle }}">
                 <div style="{{ q.hexStyle }}">
@@ -297,7 +297,9 @@ class Component extends DCLogic {
     { icon: 'ic-form', label: 'טפסים', hc: '#B7B376' },
     { icon: 'ic-cal', label: 'אירועים', hc: '#A55050' },
     { icon: 'ic-pool', label: 'המתנ"ס' },
-    { icon: 'ic-news', label: 'חדשות ועדכונים' }
+    { icon: 'ic-news', label: 'חדשות ועדכונים' },
+    { icon: 'ic-app', label: 'אפליקציית מצפה', hc: '#117975', url: 'https://apps.apple.com/il/app/%D7%9E%D7%A6%D7%A4%D7%94-%D7%A8%D7%9E%D7%95%D7%9F/id1524499862?l=he' },
+    { icon: 'ic-chat', label: 'MEETZPE', hc: '#A12D46', url: 'https://apps.apple.com/il/app/meetzpe/id6760672231?l=he' }
   ];
   cardData = [
     { title: 'תושבים וקהילה', bg: '#117975', fg: '#fff', openFg: '#fff', fullImg: true, accent: '#A12D46', links: ['מידע לתושבים', 'חדשות וכתבות', 'אירועים', 'הודעות'] },
@@ -308,6 +310,9 @@ class Component extends DCLogic {
   hex = 'polygon(80.54% 93.12%, 100% 43.12%, 69.46% 0%, 19.46% 6.88%, 0% 56.88%, 30.54% 100%)';
   twPhrases = ['מה בא לך לחפש כרגע?', 'מכרזים', 'אירועים', 'מלונות', 'חדשות ועדכונים'];
   mqRef = React.createRef();
+  mqDown = (e) => { if (e.pointerType !== 'mouse') return; const el = this.mqRef.current; if (!el) return; this.mqDrag = { x: e.clientX, s: el.scrollLeft, moved: false }; };
+  mqMove = (e) => { const d = this.mqDrag; const el = this.mqRef.current; if (!d || !el) return; const dx = e.clientX - d.x; if (Math.abs(dx) > 4) d.moved = true; el.scrollLeft = d.s - dx; };
+  mqUp = () => { const d = this.mqDrag; this.mqDrag = null; if (d && d.moved) { this.mqBlock = true; setTimeout(() => { this.mqBlock = false; }, 0); } };
 
   componentDidMount() {
     this.timer = setInterval(() => { if (!this.state.paused) this.next(); }, 5000);
@@ -389,8 +394,8 @@ class Component extends DCLogic {
       return {
         icon: q.icon, label: q.label, iconColor: a ? '#fff' : '#117975',
         iconStyle: { transform: a ? 'rotate(-60deg)' : 'none', transition: 'transform .5s cubic-bezier(.2,.8,.2,1)' },
-        onClick: () => this.setState({ mActive: i }),
-        wrapStyle: { flex: 'none', width: '56px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer', marginTop: i % 2 ? '26px' : '0', marginLeft: i < this.quickList.length - 1 ? '-4px' : '0' },
+        onClick: () => { if (this.mqBlock) return; this.setState({ mActive: i }); if (q.url) window.open(q.url, '_blank', 'noopener'); },
+        wrapStyle: { flex: 'none', width: '56px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: 'pointer', marginTop: i % 2 ? '26px' : '0', marginLeft: i < this.quickList.length - 1 ? '-4px' : '0', userSelect: 'none' },
         hexStyle: { width: '50px', height: '47px', background: a ? hc : '#fff', opacity: 0.9, clipPath: hex, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: a ? 'rotate(60deg)' : 'none', transition: 'transform .5s cubic-bezier(.2,.8,.2,1), background .2s' },
         labelStyle: { fontSize: '10.5px', fontWeight: a ? 800 : 600, color: '#fff', textAlign: 'center', lineHeight: 1.2, textShadow: '0 1px 8px rgba(0,30,28,.7)' }
       };
@@ -415,11 +420,11 @@ class Component extends DCLogic {
       mSearchOpen: s.mSearchOpen, mSearchClosed: !s.mSearchOpen,
       toggleMSearch: () => this.setState(st => ({ mSearchOpen: !st.mSearchOpen })),
       twText: s.tw || ' ',
-      quick: this.quickList.map((q, i) => ({ icon: q.icon, label: q.label,
+      quick: this.quickList.map((q, i) => ({ icon: q.icon, label: q.label, open: () => { if (q.url) window.open(q.url, '_blank', 'noopener'); },
         itemStyle: (() => { const p = [['#FAAF27', '#00534E'], ['#117975', '#fff'], ['#A12D46', '#fff'], ['#B7B376', '#00534E'], ['#00534E', '#fff']][i % 5]; return { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '84px', cursor: 'pointer', pointerEvents: 'auto', marginTop: i % 2 ? '32px' : '0', marginLeft: i < this.quickList.length - 1 ? '-14px' : '0', '--hc': q.hc || p[0], '--hi': p[1] }; })(),
         hexStyle: { width: '64px', height: '60px', background: 'var(--hbg, #fff)', opacity: 0.9, clipPath: hex, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'scale(var(--hs,1)) rotate(var(--hr,0deg))', transition: 'transform .5s cubic-bezier(.2,.8,.2,1), background .2s' } })),
       heroDim: { position: 'absolute', inset: 0, background: 'rgba(0,30,28,.68)', opacity: s.hover >= 0 ? 1 : 0, transition: 'opacity .3s', pointerEvents: 'none', zIndex: 4 },
-      cards, mQuick: mq, mqRef: this.mqRef, onMqScroll: this.onMqScroll, mCards,
+      cards, mQuick: mq, mqRef: this.mqRef, onMqScroll: this.onMqScroll, mqDown: this.mqDown, mqMove: this.mqMove, mqUp: this.mqUp, mCards,
       heroVideoRef: this.heroVideoRef,
       fbTip: s.socialTip === 'fb', igTip: s.socialTip === 'ig',
       fbEnter: () => this.setState({ socialTip: 'fb' }), igEnter: () => this.setState({ socialTip: 'ig' }),
