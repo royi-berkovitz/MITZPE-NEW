@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#117975"></rect><polygon points="50,30 67,40 67,60 50,70 33,60 33,40" fill="#FAAF27"></polygon></svg></template>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&amp;family=Rubik:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#E9E6DF;font-family:'Heebo',sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:#117975;text-decoration:none}
+    a:hover{color:#00534E}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+  </style>
+</helmet>
+<div onClickCapture="{{ onCap }}" style="min-height:100vh;direction:rtl">
+  <div style="position:fixed;right:0;top:120px;z-index:9999;display:flex;flex-direction:column;gap:8px">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button>
+    </sc-for>
+    <button onClick="{{ togglePages }}" style="{{ pagesTabStyle }}">PAGES</button>
+  </div>
+  <sc-if value="{{ pagesOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ togglePages }}" style="position:fixed;inset:0;z-index:9997;background:rgba(0,30,28,.35)"></div>
+    <div style="position:fixed;right:44px;top:120px;z-index:9998;width:300px;max-height:calc(100vh - 140px);overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,30,28,.28);padding:18px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;font-family:Heebo,sans-serif;direction:rtl">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 6px 10px;border-bottom:1px solid #ece4d6;margin-bottom:6px">
+        <span style="font-size:15px;font-weight:800;color:#00534E">עמודים מעוצבים</span>
+        <span style="display:flex;gap:14px;font-size:11px;font-weight:600;color:#716A67;padding-left:6px"><span>דסקטופ</span><span>מובייל</span></span>
+      </div>
+      <sc-for list="{{ pagesList }}" as="p" hint-placeholder-count="9">
+        <div style="{{ p.rowStyle }}">
+          <span style="{{ p.labelStyle }}">{{ p.label }}</span>
+          <span style="display:flex;gap:8px">
+            <button onClick="{{ p.goDesk }}" aria-label="דסקטופ" style="{{ p.deskStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></button>
+            <button onClick="{{ p.goMob }}" aria-label="מובייל" style="{{ p.mobStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></button>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isDesk }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div style="width:100%">
+        <sc-if value="{{ pHome }}" hint-placeholder-val="{{ true }}"><dc-import name="Home" view="desktop" hint-size="1440px,900px"></dc-import></sc-if>
+        <sc-if value="{{ pResidents }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Main" hint-size="1440px,1306px"></dc-import></sc-if>
+        <sc-if value="{{ pNews }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-News" hint-size="1440px,2090px"></dc-import></sc-if>
+        <sc-if value="{{ pArticle }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Article" hint-size="1440px,2641px"></dc-import></sc-if>
+        <sc-if value="{{ pEvents }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Events" hint-size="1440px,2090px"></dc-import></sc-if>
+        <sc-if value="{{ pEvent }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Event" hint-size="1440px,2803px"></dc-import></sc-if>
+        <sc-if value="{{ pNotices }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Notices" hint-size="1440px,1665px"></dc-import></sc-if>
+        <sc-if value="{{ pVisitors }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Visitors" hint-size="1440px,1660px"></dc-import></sc-if>
+        <sc-if value="{{ pStory }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Story" hint-size="1440px,2858px"></dc-import></sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMob }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 44px 24px 0;box-sizing:border-box">
+      <div style="{{ mobZoom }}">
+        <div ref="{{ frameRef }}" style="width:402px;height:874px;border-radius:52px;border:10px solid #1d1d1f;background:#fff;overflow-y:auto;overflow-x:hidden;box-shadow:0 30px 80px rgba(0,40,38,.25);scrollbar-width:none;position:relative">
+          <sc-if value="{{ pHome }}" hint-placeholder-val="{{ true }}"><dc-import name="Home" view="mobile" hint-size="402px,874px"></dc-import></sc-if>
+          <div style="zoom:1.0308">
+            <sc-if value="{{ pResidents }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-Mobile" hint-size="390px,1501px"></dc-import></sc-if>
+            <sc-if value="{{ pNews }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-NewsM" hint-size="390px,3130px"></dc-import></sc-if>
+            <sc-if value="{{ pArticle }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-ArticleM" hint-size="390px,1667px"></dc-import></sc-if>
+            <sc-if value="{{ pEvents }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-EventsM" hint-size="390px,3133px"></dc-import></sc-if>
+            <sc-if value="{{ pEvent }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-EventM" hint-size="390px,1788px"></dc-import></sc-if>
+            <sc-if value="{{ pNotices }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-NoticesM" hint-size="390px,1716px"></dc-import></sc-if>
+            <sc-if value="{{ pVisitors }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-VisitorsM" hint-size="390px,1749px"></dc-import></sc-if>
+            <sc-if value="{{ pStory }}" hint-placeholder-val="{{ false }}"><dc-import name="Inner-StoryM" hint-size="390px,2138px"></dc-import></sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMap }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh;background:#FBF7EF;padding:56px 100px 80px 64px;box-sizing:border-box">
+      <div style="max-width:1280px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0">
+        <h1 style="margin:0 0 8px;font-family:Rubik,sans-serif;font-size:40px;font-weight:700;color:#00534E">מפת האתר</h1>
+        <p style="margin:0 0 40px;font-size:16px;color:#716A67">לחיצה על עמוד מעוצב פותחת אותו בתצוגת הדסקטופ</p>
+        <button onClick="{{ goHome }}" style="font-family:Rubik,sans-serif;font-size:18px;font-weight:700;background:#117975;color:#fff;border:0;border-radius:12px;padding:14px 40px;cursor:pointer;box-shadow:0 6px 16px rgba(17,121,117,.25)">עמוד הבית</button>
+        <div style="width:2px;height:28px;background:#B7B376"></div>
+        <div style="width:75%;height:2px;background:#B7B376"></div>
+        <div style="width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px">
+          <sc-for list="{{ mapCols }}" as="col" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;align-items:stretch">
+              <div style="align-self:center;width:2px;height:24px;background:#B7B376"></div>
+              <div style="background:#00534E;color:#fff;font-family:Rubik,sans-serif;font-size:17px;font-weight:700;text-align:center;border-radius:10px;padding:12px 10px;margin-bottom:14px">{{ col.title }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="5">
+                  <button onClick="{{ it.onClick }}" style="{{ it.style }}"><span>{{ it.label }}</span><span style="{{ it.noteStyle }}">{{ it.note }}</span></button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <span style="font-size:13px;font-weight:700;color:#A12D46">אם יהיה תקציב</span>
+          <button onClick="{{ notDesigned }}" style="border:1.5px dashed #B7B376;background:transparent;color:#716A67;border-radius:10px;padding:10px 28px;font-family:Heebo,sans-serif;font-size:15px;cursor:pointer">עמוד חיפוש</button>
+        </div>
+        <div style="margin-top:40px;display:flex;gap:28px;font-size:14px;color:#4a423d;align-items:center">
+          <span style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:5px;background:#FAAF27"></span>עמוד מעוצב (לחיץ)</span>
+          <span style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:5px;border:1.5px dashed #B7B376"></span>עמוד לא מעוצב</span>
+          <span style="display:flex;align-items:center;gap:8px"><span style="color:#B7B376;font-weight:700">↲</span>עמוד בן</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:10000;background:#2b2522;color:#fff;font-size:15px;font-weight:600;padding:12px 22px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:toastIn .25s ease">{{ toastText }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = Object.assign({ mode: 'desktop', page: 'home', toast: false, pagesOpen: false, vw: window.innerWidth, vh: window.innerHeight }, (() => { try { return JSON.parse(localStorage.getItem('mr-proto') || '{}'); } catch (e) { return {}; } })());
+  frameRef = React.createRef();
+  navMap = {
+    'עמוד הבית': 'home', 'דף הבית': 'home', 'מצפה רמון': 'home',
+    'תושבים וקהילה': 'residents', 'מידע לתושבים': 'residents',
+    'חדשות וכתבות': 'news', 'חדשות ועדכונים': 'news', 'קראו עוד': 'article',
+    'אירועים': 'events', 'לפרטים': 'event', 'הודעות': 'notices',
+    'מבקרים ותיירות': 'visitors', 'מידע למבקרים': 'visitors',
+    'המועצה': 'story', 'הסיפור שלנו': 'story'
+  };
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth, vh: window.innerHeight });
+    window.addEventListener('resize', this.onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearTimeout(this.tt); }
+  save(p) { try { localStorage.setItem('mr-proto', JSON.stringify({ mode: p.mode, page: p.page })); } catch (e) {} }
+  go = (page, mode) => {
+    const next = { page, mode: mode || (this.state.mode === 'map' ? 'desktop' : this.state.mode) };
+    this.setState(next);
+    this.save(next);
+    window.scrollTo(0, 0);
+    if (this.frameRef.current) this.frameRef.current.scrollTop = 0;
+  };
+  setMode = (mode) => { this.setState({ mode }); this.save({ mode, page: this.state.page }); window.scrollTo(0, 0); };
+  showToast = () => {
+    clearTimeout(this.tt);
+    this.setState({ toast: true });
+    this.tt = setTimeout(() => this.setState({ toast: false }), 2200);
+  };
+  norm(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+  onCap = (e) => {
+    if (this.state.mode === 'map') return;
+    const a = e.target.closest('a');
+    if (a) {
+      const href = a.getAttribute('href');
+      if (!href || href === '#') e.preventDefault();
+      const lbl = this.norm(a.getAttribute('aria-label')) || this.norm(a.textContent);
+      const p = this.navMap[lbl] || this.navMap[this.norm(a.textContent)];
+      if (p) { e.stopPropagation(); if (p !== this.state.page) this.go(p); else { window.scrollTo(0, 0); if (this.frameRef.current) this.frameRef.current.scrollTop = 0; } return; }
+      if (!href || href === '#') { e.stopPropagation(); this.showToast(); }
+      return;
+    }
+    if (this.state.mode !== 'desktop') return;
+    let el = e.target;
+    for (let i = 0; i < 4 && el; i++, el = el.parentElement) {
+      const p = this.navMap[this.norm(el.textContent)];
+      if (p) { if (p !== this.state.page) this.go(p); return; }
+    }
+  };
+  tabStyle(on) {
+    return { writingMode: 'vertical-rl', fontFamily: 'Heebo, sans-serif', fontSize: '13px', fontWeight: 700, letterSpacing: '1.5px', padding: '16px 8px', cursor: 'pointer', borderRadius: '10px 0 0 10px', borderStyle: 'dashed', borderWidth: '1.5px', borderRightWidth: 0, borderColor: on ? '#fff' : '#00534E', background: on ? '#A12D46' : '#FAAF27', color: on ? '#fff' : '#00534E', boxShadow: '0 4px 14px rgba(0,0,0,.18)', direction: 'ltr' };
+  }
+  renderVals() {
+    const s = this.state;
+    const pg = s.page;
+    const designed = { 'מידע לתושבים': 'residents', 'חדשות וכתבות': 'news', 'עמוד כתבה': 'article', 'אירועים': 'events', 'עמוד אירוע': 'event', 'הודעות': 'notices', 'מידע למבקרים': 'visitors', 'הסיפור שלנו': 'story' };
+    const cols = [
+      { title: 'תושבים וקהילה', items: [['מידע לתושבים'], ['חדשות וכתבות'], ['עמוד כתבה', 1], ['אירועים'], ['עמוד אירוע', 1], ['הודעות']] },
+      { title: 'מבקרים ותיירות', items: [['מידע למבקרים'], ['אירועי תיירות', 0, 'הפנייה לאתר התיירות'], ['עמודי מלל פנימיים', 0, 'אטרקציות']] },
+      { title: 'עסקים ותעסוקה', items: [['מדריך רישוי עסקים'], ['טפסים'], ['ריכוז דרישות מעסקים'], ['קישורים חשובים'], ['מכרזים'], ['עמוד מכרז', 1], ['דרושים'], ['צרו קשר']] },
+      { title: 'המועצה', items: [['הסיפור שלנו'], ['מיזמים'], ['מחלקות המועצה'], ['עמוד מחלקה', 1], ['חזון ויעדים'], ['חינוך'], ['עוברים למצפה']] }
+    ];
+    const mapCols = cols.map(c => ({
+      title: c.title,
+      items: c.items.map(([label, child, note]) => {
+        const id = designed[label];
+        return {
+          label: (child ? '↲ ' : '') + label, note: note || '',
+          noteStyle: { display: note ? 'block' : 'none', fontSize: '12px', fontWeight: 400, color: '#716A67', marginTop: '2px' },
+          onClick: id ? () => this.go(id, 'desktop') : this.showToast,
+          style: { marginRight: child ? '22px' : 0, textAlign: 'right', fontFamily: 'Heebo, sans-serif', fontSize: '15px', fontWeight: id ? 700 : 500, padding: '10px 14px', borderRadius: '10px', cursor: 'pointer', border: id ? '1.5px solid #FAAF27' : '1.5px dashed #B7B376', background: id ? '#FAAF27' : 'transparent', color: id ? '#00534E' : '#716A67', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }
+        };
+      })
+    }));
+    const dz = Math.max(.5, Math.min(1.6, (s.vw - 44) / 1440));
+    const mz = Math.min(1, (s.vh - 48) / 894);
+    return {
+      tabs: [['desktop', 'DESKTOP'], ['mobile', 'MOBILE'], ['map', 'SITE MAP']].map(([m, l]) => ({ label: l, onClick: () => this.setMode(m), style: this.tabStyle(s.mode === m) })),
+      pagesOpen: !!s.pagesOpen,
+      togglePages: () => this.setState(st => ({ pagesOpen: !st.pagesOpen })),
+      pagesTabStyle: this.tabStyle(!!s.pagesOpen),
+      pagesList: [['home', 'עמוד הבית'], ['residents', 'מידע לתושבים'], ['news', 'חדשות וכתבות'], ['article', 'עמוד כתבה'], ['events', 'אירועים'], ['event', 'עמוד אירוע'], ['notices', 'הודעות'], ['visitors', 'מידע למבקרים'], ['story', 'הסיפור שלנו']].map(([id, label]) => {
+        const cur = pg === id && s.mode !== 'map';
+        const btn = (on) => ({ width: '34px', height: '34px', borderRadius: '9px', border: on ? '1.5px solid #00534E' : '1.5px solid #ece4d6', background: on ? '#00534E' : '#fff', color: on ? '#fff' : '#00534E', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0 });
+        return { label,
+          rowStyle: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', padding: '6px', borderRadius: '10px', background: cur ? '#FBF3E0' : 'transparent' },
+          labelStyle: { fontSize: '15px', fontWeight: cur ? 800 : 500, color: '#00534E' },
+          deskStyle: btn(cur && s.mode === 'desktop'), mobStyle: btn(cur && s.mode === 'mobile'),
+          goDesk: () => { this.setState({ pagesOpen: false }); this.go(id, 'desktop'); },
+          goMob: () => { this.setState({ pagesOpen: false }); this.go(id, 'mobile'); } };
+      }),
+      isDesk: s.mode === 'desktop', isMob: s.mode === 'mobile', isMap: s.mode === 'map',
+      pHome: pg === 'home', pResidents: pg === 'residents', pNews: pg === 'news', pArticle: pg === 'article', pEvents: pg === 'events', pEvent: pg === 'event', pNotices: pg === 'notices', pVisitors: pg === 'visitors', pStory: pg === 'story',
+      deskZoom: { width: '1440px', zoom: dz },
+      mobZoom: { zoom: mz },
+      frameRef: this.frameRef,
+      onCap: this.onCap,
+      goHome: () => this.go('home', 'desktop'),
+      notDesigned: this.showToast,
+      mapCols,
+      toast: s.toast, toastText: 'עמוד לא מעוצב ולכן לא מופיע'
+    };
+  }
+}
+</script>
+</body>
+</html>
